@@ -7,20 +7,31 @@ export default {
   ],
   theme: {
     extend: {
-      animation: {
-        'fade-in': 'fadeIn 0.8s ease-in-out',
-        'slide-up': 'slideUp 0.6s ease-out',
+      screens: {
+        'xs': '375px',      // Очень маленькие смартфоны
+        'sm': '640px',      // Смартфоны
+        'md': '768px',      // Планшеты
+        'lg': '1024px',     // Ноутбуки
+        'xl': '1280px',     // Десктопы
+        '2xl': '1536px',    // Большие экраны
       },
-      keyframes: {
-        fadeIn: {
-          '0%': { opacity: '0' },
-          '100%': { opacity: '1' },
-        },
-        slideUp: {
-          '0%': { transform: 'translateY(20px)', opacity: '0' },
-          '100%': { transform: 'translateY(0)', opacity: '1' },
-        },
+      spacing: {
+        '2.5': '0.625rem',   // 10px
+        '3.5': '0.875rem',   // 14px
       },
+      fontSize: {
+        'xxs': '0.625rem',   // 10px
+      },
+    },
+  },
+	variants: {
+    extend: {
+      opacity: ['xs'],       // Добавляем xs вариант для opacity
+      width: ['xs'],         // Добавляем xs вариант для width
+      height: ['xs'],        // Добавляем xs вариант для height
+      marginLeft: ['xs'],    // Добавляем xs вариант для margin-left
+      padding: ['xs'],       // Добавляем xs вариант для padding
+      fontSize: ['xs'],      // Добавляем xs вариант для font-size
     },
   },
   plugins: [],

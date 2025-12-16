@@ -9,6 +9,9 @@ import 'swiper/css'
 import 'swiper/css/effect-coverflow'
 import 'swiper/css/pagination'
 import 'swiper/css/navigation'
+import loft from './assets/images/loft.webp'
+import loft2 from './assets/images/loft2.webp'
+import { galleryItems, services, testimonials } from './constants'
 
 const App = () => {
 	const [activeService, setActiveService] = useState(0)
@@ -17,137 +20,20 @@ const App = () => {
 	const [selectedDate, setSelectedDate] = useState('');
 	const [isSubmitted, setIsSubmitted] = useState(false);
 	const [dateSelected, setDateSelected] = useState(false);
+	const [selectedTime, setSelectedTime] = useState('');
 
 	// Имитация загрузки данных
 	useEffect(() => {
 		document.title = "Luxury Hair | Салон красоты"
 	}, [])
 
-	// Данные услуг
-	const services = [
-		{
-			id: 1,
-			title: "Женская стрижка",
-			price: "от 1 500 ₽",
-			description: "Современные техники стрижки, подбор индивидуального стиля",
-			duration: "1 час",
-			popular: true,
-			details: [
-				"Консультация и подбор стиля",
-				"Мытье головы с профессиональной косметикой",
-				"Стрижка по выбранной технике",
-				"Сушка и укладка"
-			]
-		},
-		{
-			id: 2,
-			title: "Мужская стрижка",
-			price: "от 1 000 ₽",
-			description: "Классические и современные мужские стрижки",
-			duration: "40 мин",
-			popular: false,
-			details: [
-				"Консультация по выбору стиля",
-				"Точная стрижка машинкой и ножницами",
-				"Оформление бороды и усов",
-				"Укладка с профессиональными средствами"
-			]
-		},
-		{
-			id: 3,
-			title: "Окрашивание волос",
-			price: "от 3 500 ₽",
-			description: "Сложное окрашивание, балаяж, омбре, тонирование",
-			duration: "2-3 часа",
-			popular: true,
-			details: [
-				"Диагностика состояния волос",
-				"Подбор цвета по тону кожи",
-				"Профессиональное окрашивание",
-				"Уходовые процедуры после окрашивания"
-			]
-		},
-		{
-			id: 4,
-			title: "Укладка",
-			price: "от 1 200 ₽",
-			description: "Вечерние укладки, свадебные прически",
-			duration: "40 мин",
-			popular: false,
-			details: [
-				"Консультация по выбору прически",
-				"Мытье и подготовка волос",
-				"Создание укладки",
-				"Фиксация профессиональными средствами"
-			]
-		},
-		{
-			id: 5,
-			title: "Уход за волосами",
-			price: "от 2 000 ₽",
-			description: "Профессиональные уходовые процедуры",
-			duration: "1 час",
-			popular: true,
-			details: [
-				"Диагностика состояния волос",
-				"Подбор уходовых средств",
-				"Профессиональная маска",
-				"Рекомендации по домашнему уходу"
-			]
+	useEffect(() => {
+		// Принудительное обновление Swiper при смене фильтра
+		if (window.swiperInstance) {
+			window.swiperInstance.update();
+			window.swiperInstance.slideTo(0);
 		}
-	]
-
-	// Данные для галереи
-	const galleryItems = [
-		{
-			id: 1,
-			image: "https://images.unsplash.com/photo-1562322140-8baeececf3df?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-			category: "women",
-			title: "Женская стрижка каре"
-		},
-		{
-			id: 2,
-			image: "https://images.unsplash.com/photo-1599351431202-1e0f0137899a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-			category: "men",
-			title: "Мужской классический стиль"
-		},
-		{
-			id: 3,
-			image: "https://images.unsplash.com/photo-1552902865-b72c031ac5ea?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-			category: "coloring",
-			title: "Окрашивание балаяж"
-		},
-		{
-			id: 4,
-			image: "https://images.unsplash.com/photo-1580618672591-eb180b1a973f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-			category: "styling",
-			title: "Вечерняя укладка"
-		},
-		{
-			id: 5,
-			image: "https://images.unsplash.com/photo-1605497788044-5a32c7078486?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-			category: "women",
-			title: "Длинные волосы с градуировкой"
-		},
-		{
-			id: 6,
-			image: "https://avatars.mds.yandex.net/i?id=eb88c59f7535e5f0f905108b6e232e5a7a1eb328-8486953-images-thumbs&n=13",
-			category: "women",
-			title: "Стрижка с выбритыми висками"
-		},
-		{
-			id: 7,
-			image: "https://avatars.mds.yandex.net/i?id=2da9a0a7965fdc1431c7118ad269aabc12a196ad-9106703-images-thumbs&n=13",
-			category: "coloring",
-			title: "Яркое фантазийное окрашивание"
-		},
-		{
-			id: 8,
-			image: "https://avatars.mds.yandex.net/i?id=dcb4348f14cc69817192045afdd07a8d704473a7-16420753-images-thumbs&n=13",
-			category: "styling",
-			title: "Свадебная укладка"
-		}
-	]
+	}, [activeGalleryFilter]);
 
 	const handleDateSelect = () => {
 		const dateInput = document.getElementById('date-time');
@@ -174,38 +60,11 @@ const App = () => {
 		? galleryItems
 		: galleryItems.filter(item => item.category === activeGalleryFilter)
 
-	// Отзывы клиентов
-	const testimonials = [
-		{
-			id: 1,
-			name: "Анна Смирнова",
-			text: "Лучший парикмахер в городе! Всегда ухожу довольной, мои волосы выглядят потрясающе после каждого визита.",
-			rating: 5,
-			date: "2 недели назад",
-			avatar: "https://images.unsplash.com/photo-1494790108755-2616b612b786?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80"
-		},
-		{
-			id: 2,
-			name: "Михаил Иванов",
-			text: "Профессионал своего дела. Делает идеальные мужские стрижки, учитывая все пожелания. Рекомендую!",
-			rating: 5,
-			date: "месяц назад",
-			avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80"
-		},
-		{
-			id: 3,
-			name: "Елена Петрова",
-			text: "Делала сложное окрашивание - результат превзошел все ожидания! Мастер с золотыми руками.",
-			rating: 5,
-			date: "3 недели назад",
-			avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80"
-		}
-	]
+	const [showPhone, setShowPhone] = useState(false);
 
 	return (
 		<div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white overflow-hidden">
-			{/* Header */}
-		
+
 			<header className="fixed top-0 left-0 right-0 z-50 bg-gray-900/95 backdrop-blur-md border-b border-gray-800">
 				<div className="container mx-auto px-4 sm:px-6 lg:px-8 py-3 sm:py-4 flex justify-between items-center">
 					{/* Логотип - адаптированный для мобильных */}
@@ -379,139 +238,134 @@ const App = () => {
 					)}
 				</AnimatePresence>
 			</header>
-
-			{/* Hero Section */}
-			{/* Hero Section */}
-<section id="home" className="pt-24 pb-16 md:pt-32 md:pb-24 relative overflow-hidden">
-  <div className="absolute inset-0 bg-gradient-to-r from-gray-900 via-transparent to-gray-900 z-10"></div>
-  <div className="absolute inset-0">
-    <img
-      src="https://images.unsplash.com/photo-1560066984-138dadb4c035?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80"
-      alt="Салон красоты"
-      className="w-full h-full object-cover opacity-30"
-      loading="eager"
-      decoding="async"
-      fetchpriority="high"
-    />
-  </div>
-
-  {/* Три градиентных кружочка слева - адаптированы */}
-  <div className="absolute left-2 xs:left-3 sm:left-4 md:left-6 lg:left-8 top-1/2 transform -translate-y-1/2 z-20 flex flex-col space-y-1 sm:space-y-2">
-    {[1, 2, 3].map((num) => (
-      <motion.div
-        key={num}
-        className="relative w-7 h-7 xs:w-8 xs:h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 lg:w-14 lg:h-14 rounded-full flex items-center justify-center 
+			<section id="home" className="pt-24 pb-16 md:pt-32 md:pb-24 relative overflow-hidden">
+				<div className="absolute inset-0 bg-gradient-to-r from-gray-900 via-transparent to-gray-900 z-10"></div>
+				<div className="absolute inset-0">
+					<img
+						src={loft2}
+						alt="Салон красоты"
+						className="w-full h-full object-cover opacity-30"
+						loading="eager"
+						decoding="async"
+						fetchpriority="high"
+					/>
+				</div>
+				<div className="absolute left-2 xs:left-3 sm:left-4 md:left-6 lg:left-8 top-1/2 transform -translate-y-1/2 z-20 flex flex-col space-y-1 sm:space-y-2">
+					{[1, 2, 3].map((num) => (
+						<motion.div
+							key={num}
+							className="relative w-7 h-7 xs:w-8 xs:h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 lg:w-14 lg:h-14 rounded-full flex items-center justify-center 
                    opacity-40 xs:opacity-50 sm:opacity-60 md:opacity-70 lg:opacity-80 xl:opacity-100 
                    transition-all duration-300"
-        whileHover={{ scale: 1.1 }}
-        animate={{
-          boxShadow: [
-            "0 0 8px rgba(245, 158, 11, 0.2)",
-            "0 0 15px rgba(72, 189, 236, 0.4)",
-            "0 0 8px rgba(245, 158, 11, 0.2)"
-          ]
-        }}
-        transition={{
-          duration: 3,
-          repeat: Infinity,
-          repeatType: "reverse"
-        }}
-      >
-        <div className="absolute inset-0 bg-gradient-to-br from-amber-400 via-[#88de8a] to-amber-900/30 rounded-full"></div>
-        <div className="absolute inset-[1px] sm:inset-[2px] bg-gray-900 rounded-full"></div>
+							whileHover={{ scale: 1.1 }}
+							animate={{
+								boxShadow: [
+									"0 0 8px rgba(245, 158, 11, 0.2)",
+									"0 0 15px rgba(72, 189, 236, 0.4)",
+									"0 0 8px rgba(245, 158, 11, 0.2)"
+								]
+							}}
+							transition={{
+								duration: 3,
+								repeat: Infinity,
+								repeatType: "reverse"
+							}}
+						>
+							<div className="absolute inset-0 bg-gradient-to-br from-amber-400 via-[#88de8a] to-amber-900/30 rounded-full"></div>
+							<div className="absolute inset-[1px] sm:inset-[2px] bg-gray-900 rounded-full"></div>
 
-        <div className="relative z-10">
-          {num === 1 ? (
-            <motion.div
-              className="relative w-3 h-3 xs:w-4 xs:h-4 sm:w-5 sm:h-5 md:w-6 md:h-6"
-              animate={{
-                y: [0, -2, 0],
-              }}
-              transition={{ duration: 2, repeat: Infinity }}
-            >
-              <div className="absolute inset-0 bg-gradient-to-br from-amber-300 to-amber-600 rounded-lg rotate-12"></div>
-              <div className="absolute inset-[1px] sm:inset-[2px] bg-gray-900 rounded-lg rotate-12 flex items-center justify-center">
-                <span className="text-[6px] xs:text-[7px] sm:text-[10px] md:text-xs font-bold text-transparent bg-gradient-to-r from-amber-300 to-amber-600 bg-clip-text -rotate-12">L</span>
-              </div>
-            </motion.div>
-          ) : num === 2 ? (
-            <motion.div
-              className="relative w-3 h-3 xs:w-4 xs:h-4 sm:w-5 sm:h-5 md:w-6 md:h-6"
-              animate={{
-                rotate: [0, 15, 0, -15, 0],
-              }}
-              transition={{ duration: 3, repeat: Infinity }}
-            >
-              <div className="absolute inset-0 bg-gradient-to-br from-pink-400 to-purple-600 rounded-lg"></div>
-              <div className="absolute inset-[1px] sm:inset-[2px] bg-gray-900 rounded-lg flex items-center justify-center">
-                <span className="text-[6px] xs:text-[7px] sm:text-[10px] md:text-xs font-bold text-transparent bg-gradient-to-r from-pink-400 to-purple-600 bg-clip-text">H</span>
-              </div>
-            </motion.div>
-          ) : (
-            <motion.div
-              className="relative w-3 h-3 xs:w-4 xs:h-4 sm:w-5 sm:h-5 md:w-6 md:h-6"
-              animate={{
-                scale: [1, 1.1, 1],
-                borderRadius: ["50%", "35%", "50%"]
-              }}
-              transition={{ duration: 2.5, repeat: Infinity }}
-            >
-              <div className="absolute inset-0 bg-gradient-to-br from-purple-500 to-amber-400 rounded-full"></div>
-              <div className="absolute inset-[1px] sm:inset-[2px] bg-gray-900 rounded-full flex items-center justify-center">
-                <span className="text-[6px] xs:text-[7px] sm:text-[10px] md:text-xs font-bold text-transparent bg-gradient-to-r from-purple-500 to-amber-400 bg-clip-text">10</span>
-              </div>
-            </motion.div>
-          )}
-        </div>
-      </motion.div>
-    ))}
-  </div>
+							<div className="relative z-10">
+								{num === 1 ? (
+									<motion.div
+										className="relative w-3 h-3 xs:w-4 xs:h-4 sm:w-5 sm:h-5 md:w-6 md:h-6"
+										animate={{
+											y: [0, -2, 0],
+										}}
+										transition={{ duration: 2, repeat: Infinity }}
+									>
+										<div className="absolute inset-0 bg-gradient-to-br from-amber-300 to-amber-600 rounded-lg rotate-12"></div>
+										<div className="absolute inset-[1px] sm:inset-[2px] bg-gray-900 rounded-lg rotate-12 flex items-center justify-center">
+											<span className="text-[6px] xs:text-[7px] sm:text-[10px] md:text-xs font-bold text-transparent bg-gradient-to-r from-amber-300 to-amber-600 bg-clip-text -rotate-12">L</span>
+										</div>
+									</motion.div>
+								) : num === 2 ? (
+									<motion.div
+										className="relative w-3 h-3 xs:w-4 xs:h-4 sm:w-5 sm:h-5 md:w-6 md:h-6"
+										animate={{
+											rotate: [0, 15, 0, -15, 0],
+										}}
+										transition={{ duration: 3, repeat: Infinity }}
+									>
+										<div className="absolute inset-0 bg-gradient-to-br from-pink-400 to-purple-600 rounded-lg"></div>
+										<div className="absolute inset-[1px] sm:inset-[2px] bg-gray-900 rounded-lg flex items-center justify-center">
+											<span className="text-[6px] xs:text-[7px] sm:text-[10px] md:text-xs font-bold text-transparent bg-gradient-to-r from-pink-400 to-purple-600 bg-clip-text">H</span>
+										</div>
+									</motion.div>
+								) : (
+									<motion.div
+										className="relative w-3 h-3 xs:w-4 xs:h-4 sm:w-5 sm:h-5 md:w-6 md:h-6"
+										animate={{
+											scale: [1, 1.1, 1],
+											borderRadius: ["50%", "35%", "50%"]
+										}}
+										transition={{ duration: 2.5, repeat: Infinity }}
+									>
+										<div className="absolute inset-0 bg-gradient-to-br from-purple-500 to-amber-400 rounded-full"></div>
+										<div className="absolute inset-[1px] sm:inset-[2px] bg-gray-900 rounded-full flex items-center justify-center">
+											<span className="text-[6px] xs:text-[7px] sm:text-[10px] md:text-xs font-bold text-transparent bg-gradient-to-r from-purple-500 to-amber-400 bg-clip-text">10</span>
+										</div>
+									</motion.div>
+								)}
+							</div>
+						</motion.div>
+					))}
+				</div>
 
-  <div className="container mx-auto px-4 xs:px-5 sm:px-6 md:px-8 lg:px-12 relative z-20">
-    <div className="max-w-full lg:max-w-2xl ml-0 
+				<div className="container mx-auto px-4 xs:px-5 sm:px-6 md:px-8 lg:px-12 relative z-20">
+					<div className="max-w-full lg:max-w-2xl ml-0 
                     xs:ml-10 sm:ml-12 md:ml-14 lg:ml-16 xl:ml-0">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
-      >
-        <h1 className="text-2xl xs:text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mb-4 leading-tight">
-          Профессиональный{' '}
-          <span className="bg-gradient-to-r from-amber-300 to-amber-500 bg-clip-text text-transparent">
-            парикмахер
-          </span>{' '}
-          с 10-летним опытом
-        </h1>
-        <p className="text-sm xs:text-base sm:text-lg md:text-xl text-gray-300 mb-6 sm:mb-8 max-w-xl lg:max-w-2xl">
-          Создаю индивидуальный стиль, подчеркивающий вашу уникальность. Работаю с последними тенденциями парикмахерского искусства.
-        </p>
-        <div className="flex flex-col xs:flex-row gap-2 xs:gap-3 sm:gap-4">
-          <ScrollLink
-            to="contact"
-            spy={true}
-            smooth={true}
-            offset={-70}
-            duration={500}
-            className="bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-semibold py-2.5 xs:py-3 px-4 xs:px-5 sm:px-6 md:px-8 rounded-full transition-all hover:shadow-lg hover:shadow-amber-500/30 flex items-center justify-center cursor-pointer text-xs xs:text-sm sm:text-base"
-          >
-            <Phone size={16} xs:size={18} sm:size={20} className="mr-1 xs:mr-2" /> 
-            <span className="whitespace-nowrap">Записаться по телефону</span>
-          </ScrollLink>
-          <ScrollLink
-            to="gallery"
-            spy={true}
-            smooth={true}
-            offset={-70}
-            duration={500}
-            className="bg-gray-800 hover:bg-gray-700 border border-gray-700 text-white font-semibold py-2.5 xs:py-3 px-4 xs:px-5 sm:px-6 md:px-8 rounded-full transition-all cursor-pointer text-xs xs:text-sm sm:text-base text-center"
-          >
-            <span className="whitespace-nowrap">Смотреть портфолио</span>
-          </ScrollLink>
-        </div>
-      </motion.div>
-    </div>
-  </div>
-</section>
+						<motion.div
+							initial={{ opacity: 0, y: 20 }}
+							animate={{ opacity: 1, y: 0 }}
+							transition={{ duration: 0.8 }}
+						>
+							<h1 className="text-2xl xs:text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mb-4 leading-tight">
+								Профессиональный{' '}
+								<span className="bg-gradient-to-r from-amber-300 to-amber-500 bg-clip-text text-transparent">
+									парикмахер
+								</span>{' '}
+								с 10-летним опытом
+							</h1>
+							<p className="text-sm xs:text-base sm:text-lg md:text-xl text-gray-300 mb-6 sm:mb-8 max-w-xl lg:max-w-2xl">
+								Создаю индивидуальный стиль, подчеркивающий вашу уникальность. Работаю с последними тенденциями парикмахерского искусства.
+							</p>
+							<div className="flex flex-col xs:flex-row gap-2 xs:gap-3 sm:gap-4">
+								<div className="w-full xs:w-auto">
+									<button
+										onClick={() => setShowPhone(!showPhone)}
+										className="w-full xs:w-auto bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-semibold py-2.5 xs:py-3 px-4 xs:px-5 sm:px-6 md:px-8 rounded-full transition-all hover:shadow-lg hover:shadow-amber-500/30 flex items-center justify-center cursor-pointer text-xs xs:text-sm sm:text-base min-w-[180px] xs:min-w-[200px] sm:min-w-[220px]"
+									>
+										<Phone size={16} className="mr-1 xs:mr-2 flex-shrink-0" />
+										<span className="whitespace-nowrap">
+											{showPhone ? '+7 (999) 123-45-67' : 'Записаться по телефону'}
+										</span>
+									</button>
+								</div>
+								<ScrollLink
+									to="gallery"
+									spy={true}
+									smooth={true}
+									offset={-70}
+									duration={500}
+									className="bg-gray-800 hover:bg-gray-700 border border-gray-700 text-white font-semibold py-2.5 xs:py-3 px-4 xs:px-5 sm:px-6 md:px-8 rounded-full transition-all cursor-pointer text-xs xs:text-sm sm:text-base text-center"
+								>
+									<span className="whitespace-nowrap">Смотреть портфолио</span>
+								</ScrollLink>
+							</div>
+						</motion.div>
+					</div>
+				</div>
+			</section>
 
 			{/* Services Section */}
 			<section id="services" className="py-16 bg-gray-900/50">
@@ -641,6 +495,10 @@ const App = () => {
 					{/* Swiper Gallery */}
 					<div className="py-8">
 						<Swiper
+							onSwiper={(swiper) => {
+								window.swiperInstance = swiper;
+								swiper.update();
+							}}
 							effect={'coverflow'}
 							grabCursor={true}
 							centeredSlides={true}
@@ -700,7 +558,7 @@ const App = () => {
 							<div className="relative mb-8 lg:mb-0">
 								<div className="w-full h-80 md:h-96 lg:h-[500px] rounded-2xl overflow-hidden">
 									<img
-										src="https://images.unsplash.com/photo-1585747860715-2ba37e788b70?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+										src={loft}
 										alt="Мастер парикмахер"
 										className="w-full h-full object-cover"
 										loading="eager"
@@ -828,9 +686,6 @@ const App = () => {
 								<div className="mb-8">
 									<h4 className="font-semibold text-lg mb-4">Социальные сети</h4>
 									<div className="flex space-x-4">
-										<a href="#" className="w-12 h-12 bg-gray-700 hover:bg-amber-600 rounded-full flex items-center justify-center transition-all">
-											<Instagram size={22} />
-										</a>
 										<a href="#" className="w-12 h-12 bg-gray-700 hover:bg-blue-600 rounded-full flex items-center justify-center transition-all">
 											<span className="font-bold">VK</span>
 										</a>
@@ -909,38 +764,33 @@ const App = () => {
 											</select>
 										</div>
 
-										<div>
-											<div className="flex justify-between items-center mb-2">
-												<label className="block text-gray-300">Желаемая дата и время</label>
-												{dateSelected && (
-													<motion.div
-														initial={{ scale: 0 }}
-														animate={{ scale: 1 }}
-														className="flex items-center space-x-1 text-amber-300 text-sm"
-													>
-														<CalendarCheck size={16} />
-														<span>Выбрано</span>
-													</motion.div>
-												)}
+										<div className="grid grid-cols-2 gap-4">
+											<div>
+												<label className="block text-gray-300 mb-2">Дата</label>
+												<input
+													type="date"
+													className="w-full bg-gray-700 border border-gray-600 rounded-lg py-3 px-4 text-white focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+													onChange={(e) => {
+														const date = e.target.value;
+														const time = selectedTime || '12:00';
+														setSelectedDate(`${date}T${time}`);
+														setDateSelected(!!date);
+													}}
+												/>
 											</div>
-											<input
-												id="date-time"
-												type="datetime-local"
-												className="w-full bg-gray-700 border border-gray-600 rounded-lg py-3 px-4 text-white focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
-												onChange={(e) => {
-													setSelectedDate(e.target.value);
-													setDateSelected(!!e.target.value);
-												}}
-											/>
-											{selectedDate && (
-												<motion.p
-													initial={{ opacity: 0 }}
-													animate={{ opacity: 1 }}
-													className="text-amber-300 text-sm mt-2"
-												>
-													Выбрано: {new Date(selectedDate).toLocaleString('ru-RU')}
-												</motion.p>
-											)}
+											<div>
+												<label className="block text-gray-300 mb-2">Время</label>
+												<input
+													type="time"
+													className="w-full bg-gray-700 border border-gray-600 rounded-lg py-3 px-4 text-white focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+													onChange={(e) => {
+														const time = e.target.value;
+														const date = selectedDate.split('T')[0] || new Date().toISOString().split('T')[0];
+														setSelectedDate(`${date}T${time}`);
+														setDateSelected(!!time);
+													}}
+												/>
+											</div>
 										</div>
 
 										<button
@@ -965,7 +815,8 @@ const App = () => {
 			<footer className="py-8 border-t border-gray-800 bg-gray-900">
 				<div className="container mx-auto px-6 sm:px-8 lg:px-12">
 					<div className="flex flex-col md:flex-row justify-between items-center">
-						<div className="flex items-center space-x-2 mb-4 md:mb-0">
+						<div className="flex items-center space-x-2 mb-4 md:mb-0 cursor-pointer"
+							onClick={() => scroll.scrollToTop()} title="Наверх">
 							<Scissors className="h-6 w-6 text-amber-400" />
 							<h3 className="text-xl font-bold bg-gradient-to-r from-amber-300 to-amber-500 bg-clip-text text-transparent">
 								Luxury Hair
@@ -973,12 +824,30 @@ const App = () => {
 						</div>
 
 						<div className="text-gray-400 text-center md:text-right">
-							<p>© 2026 Luxury Hair. Все права защищены.</p>
+							<p>© 2025 Luxury Hair. Все права защищены.</p>
 							<p className="text-sm mt-1">Сайт создан для презентации услуг парикмахера</p>
 						</div>
 					</div>
 				</div>
 			</footer>
+			<style>{`
+  .swiper-pagination-bullet {
+    background: rgba(255, 255, 255, 0.6) !important;
+    opacity: 1 !important;
+    width: 10px !important;
+    height: 10px !important;
+    margin: 0 6px !important;
+  }
+  .swiper-pagination-bullet-active {
+    background: #fbbf24 !important;
+    transform: scale(1.2);
+    box-shadow: 0 0 10px rgba(251, 191, 36, 0.5);
+  }
+  .swiper-pagination {
+    position: relative !important;
+    margin-top: 30px !important;
+  }
+`}</style>
 		</div>
 	)
 }
